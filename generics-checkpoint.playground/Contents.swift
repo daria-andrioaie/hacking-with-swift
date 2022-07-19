@@ -13,13 +13,15 @@ print(countLetters(string: myString))
 
 
 // TODO: fix this buggy code
-//func findAverage<Number: Numeric & Divisible>(numbers: [Number]) -> Number {
-//    var sum: Number = 0
-//    for number in numbers {
-//        sum += number
-//    }
-//    return sum / (Number(exactly: numbers.count) ?? 1)
-////    return Number(exactly: Int(sum) / numbers.count) ?? .zero
-//}
+func findAverage<Number: Numeric & BinaryFloatingPoint>(numbers: [Number]) -> Number {
+    var sum: Number = 0
+    var count: Number = 0
+    for number in numbers {
+        sum += number
+        count += 1
+    }
+    return sum / count
 
-//print(findAverage(numbers: [1, 2, 3, 4]))
+}
+
+print(findAverage(numbers: [1, 2, 3, 4]))
