@@ -21,7 +21,7 @@ func findAverage<Number: Numeric & BinaryFloatingPoint>(numbers: [Number]) -> Nu
         count += 1
     }
     return sum / count
-
+ 
 }
 
 print(findAverage(numbers: [1, 2, 3, 4]))
