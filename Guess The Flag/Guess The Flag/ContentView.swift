@@ -18,7 +18,7 @@ struct ContentView: View {
     @State private var chosenAnswer: Int = -1
     @State private var score: Int = 0
     
-    let maximumNumberOfQuestions = 8
+    let maximumNumberOfQuestions = 5
     @State private var currentQuestionNumber = 1
     
     var body: some View {
