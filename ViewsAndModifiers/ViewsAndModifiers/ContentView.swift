@@ -34,6 +34,18 @@ struct Title: ViewModifier {
     }
 }
 
+struct LargeBlueFont: ViewModifier {
+    func body(content: Content) -> some View {
+        content.foregroundColor(.blue).font(.largeTitle)
+    }
+}
+
+extension View {
+    func largeBlueTitle() -> some View {
+        modifier(LargeBlueFont())
+    }
+}
+
 extension View {
     func titleStyle() -> some View {
         modifier(Title())
