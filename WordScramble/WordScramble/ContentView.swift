@@ -14,6 +14,7 @@ struct ContentView: View {
     @State private var errorTitle = ""
     @State private var errorMessage = ""
     @State private var showingError = false
+    @State private var score = 0
     
     var body: some View {
         NavigationView {
@@ -25,7 +26,9 @@ struct ContentView: View {
                             addNewWord()
                         }
                 }
-                
+                Text("Score: \(score)")
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .padding(.trailing)
                 Section {
                     ForEach(usedWords, id: \.self) { word in
                         HStack {
@@ -35,6 +38,12 @@ struct ContentView: View {
                     }
                 }
             }
+            .listStyle(.plain)
+            .toolbar(content: {
+                Button("Restart") {
+                    startGame()
+                }
+            })
             .navigationTitle(rootWord)
             .onAppear(perform: startGame)
             .alert(errorTitle, isPresented: $showingError) {
@@ -49,8 +58,13 @@ struct ContentView: View {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         guard answer.count > 0 else { return }
         
+        guard isValid(word: answer) else {
+            wordError(title: "Word is invalid", message: "You cannot use the same word as '\(rootWord)'")
+            return
+        }
+        
         guard isOriginal(word: answer) else {
-            wordError(title: "word used already", message: "Be more original")
+            wordError(title: "Word used already", message: "Be more original")
             return
         }
         
@@ -64,6 +78,8 @@ struct ContentView: View {
             return
         }
         
+        score += answer.count
+        
         withAnimation {
             usedWords.insert(answer, at: 0)
         }
@@ -75,6 +91,9 @@ struct ContentView: View {
             if let startWords = try? String(contentsOf: startWordsUrl) {
                 let allWords = startWords.components(separatedBy: "\n")
                 rootWord = allWords.randomElement() ?? "silkworm"
+                usedWords = []
+                score = 0
+                newWord = ""
                 return
             }
             
@@ -84,6 +103,10 @@ struct ContentView: View {
 
     func isOriginal(word: String) -> Bool {
         !usedWords.contains(word)
+    }
+    
+    func isValid(word: String) -> Bool {
+        word.count >= 3 && word != rootWord
     }
     
     func isPossible(word: String) -> Bool {
